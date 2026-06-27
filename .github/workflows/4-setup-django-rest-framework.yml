@@ -63,22 +63,24 @@ jobs:
       - name: Check server.ts uses codespace env variable
         id: check-codespace-name
         continue-on-error: true
-        uses: skills/action-keyphrase-checker@v2.0.0
-        with:
-          text-file: octofit-tracker/backend/src/server.ts
-          keyphrase: 'CODESPACE_NAME'
-          minimum-occurrences: 1
-          case-sensitive: false
+        run: |
+          if grep -q "CODESPACE_NAME" octofit-tracker/backend/src/server.ts; then
+            echo "Found CODESPACE_NAME in server.ts"
+          else
+            echo "Missing CODESPACE_NAME in server.ts"
+            exit 1
+          fi
 
       - name: Check server.ts includes codespace URL pattern
         id: check-codespace-url
         continue-on-error: true
-        uses: skills/action-keyphrase-checker@v2.0.0
-        with:
-          text-file: octofit-tracker/backend/src/server.ts
-          keyphrase: '-8000.app.github.dev'
-          minimum-occurrences: 1
-          case-sensitive: false
+        run: |
+          if grep -q "-8000.app.github.dev" octofit-tracker/backend/src/server.ts; then
+            echo "Found codespace URL pattern in server.ts"
+          else
+            echo "Missing codespace URL pattern in server.ts"
+            exit 1
+          fi
 
       - name: Update comment - step results
         if: ${{ steps.find-last-comment.outputs.comment-id != '' }}
