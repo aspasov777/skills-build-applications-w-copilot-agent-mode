@@ -6,12 +6,13 @@ import teamsRouter from './routes/teams';
 import activitiesRouter from './routes/activities';
 import leaderboardRouter from './routes/leaderboard';
 import workoutsRouter from './routes/workouts';
+import { databaseUri } from './config/database';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT ? Number(process.env.PORT) : 8000;
-const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/octofit_db';
+const mongoUri = process.env.MONGODB_URI || databaseUri;
 const codespaceName = process.env.CODESPACE_NAME;
 const apiBaseUrl = codespaceName
   ? `https://${codespaceName}-8000.app.github.dev`
